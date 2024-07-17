@@ -1,6 +1,6 @@
 # Ctrl-CIC: Directing the Visual Narrative through User-Defined Highlights
 
-Repository for ["Controllable Contextualized Image Captioning: Directing the Visual Narrative through User-Defined Highlights"]() in ECCV 2024.
+Repository for ["Controllable Contextualized Image Captioning: Directing the Visual Narrative through User-Defined Highlights"](https://ctrl-cic.github.io/) in ECCV 2024.
 
 Code coming soon.
 
