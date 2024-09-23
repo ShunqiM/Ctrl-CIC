@@ -8,7 +8,7 @@ Repository for ["Controllable Contextualized Image Captioning: Directing the Vis
 - Update your local path variables in [env_definer.sh](starter/env_definer.sh) and setup them according to the [ReadME](starter/ReadMe.md) file.
 - Run preprocess/launch_preprocess_tasks.py with task flag 'download_img' and 'extract_txt' respectively, to download the images required for the dataset (around 3~4 TB) and extract the text data locally.
 - Some preprocessed data are provided, including
-    - .csv files specifying the training, validation and testing splits
+    - .csv files specifying the training, validation and testing splits (The training split is large and provided [here](https://huggingface.co/Shunqi/Ctrl-CIC)).
     - Extracted [highlights](data/highlights/) for inference during evaluation.
     - [GRIT image captions](data/images_1000_response.json) facilitating text-based GPT-4 Ctrl-CIC caption generation.
 
