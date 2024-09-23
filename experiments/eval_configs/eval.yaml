@@ -1,0 +1,49 @@
+recursive_load_config: True  # recursive load all "_default.yaml" files (from current level to all upper-level folders)
+
+use_cached_feature: True
+save_model_output: True
+use_image_embs: True
+
+evaluator:
+  callable: SimpleEvaluator
+  params:
+    run_id: 230730-001740-pid2209120-500kimg512-laconizing
+    # run_id: 230923-105002-pid9806-full_baseline-uncreate
+    max_steps: 1000000
+    # max_steps: 262144
+    per_device_eval_batch_size: 16
+    remove_unused_columns: False
+    dataloader_num_workers: 16
+    # output_dir: tmp
+    output_dir: ${CKPT}/CIC/experiments
+    # output_dir: ${CKPT}/CIC/test
+    fp16: False
+    eval_steps: 0
+    do_val: False
+    do_test: True
+    test_model_index: 320000
+    # test_model_index: 990000
+    save_model_output: True
+
+dataset:
+  validset:
+    callable: Web2MFTDataset
+    params:
+      csv_name: val_image_dict_v7.csv
+      feature_matrix_name: val_image_feature_matrix.pt
+      max_src_len: 511
+      max_tgt_len: 128
+  testset:
+    callable: Web2MFTDataset
+    params:
+      csv_name: test_image_dict_v7.csv
+      feature_matrix_name: test_image_feature_matrix.pt
+      max_src_len: 511
+      max_tgt_len: 128
+      # pad_image: True
+
+model:
+  model_class: transformers.LongT5ForConditionalGeneration
+  callable: LongT5
+  params:
+    pretrained_model_name_or_path: google/long-t5-tglobal-base

@@ -1,0 +1,12 @@
+# Default experiment configuration (do not change any value here)
+resume_name: null
+trainer:
+  callable: TrainerWrapper
+  params:
+    trainer_class: transformers.Trainer
+    output_dir: tmp
+    seed: 1140
+    report_to: "wandb"
+    save_safetensors: True
+
+note: null

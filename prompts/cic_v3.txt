@@ -1,0 +1,11 @@
+CONTEXTUAL IMAGE CAPTIONING REQUEST
+
+TASK: Based on the context and image description provided, please generate a contextual image caption that captures the essence of the image and its significance in the given context. For your reference, the Context Section will be given as the combination of a page title, a section title, and a section body. Some extra images other than the target image in the context section, if any, are included in the context section and described by [ImageCaptions] followed by text descriptions of the image to enrich the context. The image to be captioned itself is not directly accessible by the model; instead, a textual description of the image is given in the "Image Description" after the context section. Generate the proper caption for the image when the image is given together with the context. Please generate the caption directly without any explainations.
+
+Context Section:
+{{Document}}
+
+Image Description:
+{{Attribution}}
+
+Contextual Caption (do not add quotations surrounding the response):

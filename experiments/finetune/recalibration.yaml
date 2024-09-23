@@ -1,0 +1,75 @@
+recursive_load_config: True  # recursive load all "_default.yaml" files (from current level to all upper-level folders)
+
+use_cached_feature: True
+use_image_embs: True
+add_input_mask: True
+note: reweight_full
+trainer:
+  params:
+    trainer_class: src.pipeline.CustomTrainer
+    max_steps: 3000000
+    per_device_train_batch_size: 12
+    per_device_eval_batch_size: 16
+    remove_unused_columns: False
+    dataloader_num_workers: 16
+
+    output_dir: ${CKPT}/CIC/experiments
+    fp16: False
+    do_eval: True
+    evaluation_strategy: steps
+    eval_steps: 10000
+    logging_strategy: steps
+    logging_steps: 1000
+    save_steps: 10000
+    load_best_model_at_end: True
+    save_total_limit: 30
+
+dataset:
+  trainset:
+    # callable: DummyDataset
+    callable: Web2MFTDataset
+    params:
+      # csv_path: /mnt/sdb/PREP/MMWebpage/val_image_dict.csv
+      csv_name: train_image_dict_v9.csv
+      feature_matrix_name: train_image_feature_matrix_full.pt
+      max_src_len: 511 # leave one for image embedding
+      max_tgt_len: 128
+      mask_dir: 't5-large_mean_512'
+      normalise_score: fix_scale
+      pad_image: True
+  validset:
+    callable: Web2MFTDataset
+    params:
+      csv_name: val_image_dict_v7.csv
+      feature_matrix_name: val_image_feature_matrix.pt
+      max_src_len: 511
+      max_tgt_len: 128
+      mask_dir: 't5-large_mean_512'
+      normalise_score: fix_scale
+      pad_image: True
+
+  testset:
+    callable: Web2MFTDataset
+
+# LongT5 with fp16 does not work correctly as they are trained on bf16, and it's not feasible at our set up, 
+# https://github.com/huggingface/transformers/issues/17978
+model:
+  # callable: MaskedLongT5
+  # callable: MaskAsTokenLongT5
+  callable: PretrainedReWeightLongT5
+  params:
+    pretrained_model_name_or_path: google/long-t5-tglobal-base
+  image_model: vit
+  image_model_name: google/vit-base-patch16-224-in21k
+
+# Note that till now none of the below are used, but the hf default
+optimizer:
+  type: AdamW
+  adamw_params:
+    lr: 1.0e-4
+    betas: [0.9, 0.98]
+    weight_decay: 1.0e-5
+  adafactor_params:
+    lr: 1.0e-4
+    weight_decay: 1.0e-5
+    beta1: null

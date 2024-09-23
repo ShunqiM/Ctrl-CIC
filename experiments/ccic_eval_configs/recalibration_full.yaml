@@ -1,0 +1,72 @@
+recursive_load_config: True  # recursive load all "_default.yaml" files (from current level to all upper-level folders)
+
+use_cached_feature: True
+save_model_output: True
+use_image_embs: True
+add_input_mask: True
+mask_as_labels: True
+
+use_clip_score: False
+use_sent_score: False
+
+evaluator:
+  callable: SimpleEvaluator
+  params:
+    run_id: 231113-162802-pid1897475-weight_predictor-nonmystic
+    max_steps: 1000000
+    per_device_eval_batch_size: 1
+    remove_unused_columns: False
+    dataloader_num_workers: 16
+    output_dir: ${CKPT}/CIC/experiments
+    # output_dir: ${CKPT}/CIC/test
+    fp16: False
+    eval_steps: 0
+    do_val: False
+    do_test: True
+    test_model_index: 660000 
+
+    save_model_output: False
+    ccic_model: 'reweight'
+    wandb: False
+    load_predictions: False
+    debug: True
+
+
+dataset:
+  validset:
+    callable: CCICInferenceDataset
+    params:
+      csv_name: val_image_dict_v7.csv
+      feature_matrix_name: val_image_feature_matrix.pt
+      max_src_len: 511
+      max_tgt_len: 128
+      mask_dir: 't5-large_mean_512'
+      normalise_score: fix_scale
+      pad_image: True
+  testset:
+    callable: CCICInferenceDataset
+    params:
+      csv_name: test_image_dict_ccic_fullset_v1.csv
+      
+      feature_matrix_name: test_image_feature_matrix.pt
+      max_src_len: 511
+      max_tgt_len: 128
+      mask_dir: 't5-large_mean_512'
+      normalise_score: fix_scale
+      mode: 'reweight'
+      ccic_json_path: sample_1_highlight_1_fullset.json
+      
+      pad_image: True
+      highlight_weight: 0.6
+      debug: False
+
+model:
+  model_class: src.model.CICModel.TwoStageLongT5
+  params:
+    base_model_path: ${CKPT}/CIC/experiments/231026-225939-pid693673-reweight_full-nonimmunities
+    base_model_index: 2930000 
+
+
+    pretrained_model_name_or_path: google/long-t5-tglobal-base
+    ccic_mode: 'add'
+    highlight_val: 0.6

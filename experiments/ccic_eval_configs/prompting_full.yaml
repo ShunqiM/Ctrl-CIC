@@ -1,0 +1,73 @@
+recursive_load_config: True  # recursive load all "_default.yaml" files (from current level to all upper-level folders)
+
+use_cached_feature: True
+save_model_output: True
+use_image_embs: True
+
+extra_special_tokens: [<MSK>, <SEP>, <CPT>]
+
+use_clip_score: True
+use_sent_score: True
+
+evaluator:
+  callable: SimpleEvaluator
+  params:
+    run_id: 231009-162123-pid311299-full_word_prefix-foraneous
+    max_steps: 1000000
+    # max_steps: 262144
+    per_device_eval_batch_size: 1
+    remove_unused_columns: False
+    dataloader_num_workers: 16
+    # output_dir: tmp
+    output_dir: ${CKPT}/CIC/experiments
+    # output_dir: ${CKPT}/CIC/test
+    fp16: False
+    eval_steps: 0
+    do_val: False
+    do_test: True
+    test_model_index: 2760000
+    save_model_output: False
+    ccic_model: 'prefix'
+    wandb: False
+    load_predictions: False
+    debug: True
+
+    
+# change bs to 1, return_prefix to true, max_tgt_len to 128 for gt prefix decoding
+
+dataset:
+  validset:
+    callable: CCICInferenceDataset
+    params:
+      csv_name: val_image_dict_v7.csv
+      feature_matrix_name: val_image_feature_matrix.pt
+      max_src_len: 511
+      max_tgt_len: 128
+      mask_dir: 't5-large_mean_512'
+      normalise_score: fix_scale
+      mask_threshold: 0.65
+      pad_image: True
+
+  testset:
+    callable: CCICInferenceDataset
+    params:
+      csv_name: test_image_dict_ccic_fullset_v1.csv
+
+      feature_matrix_name: test_image_feature_matrix.pt
+      max_src_len: 511
+      max_tgt_len: 128
+      mask_dir: 't5-large_mean_512'
+      normalise_score: fix_scale
+      mask_threshold: 0.65
+      ccic_json_path: sample_1_highlight_1_fullset.json
+      
+      mode: 'word_prefix'
+      pad_image: True
+      # return_clip_image: True
+
+
+model:
+  model_class: transformers.LongT5ForConditionalGeneration
+  callable: LongT5
+  params:
+    pretrained_model_name_or_path: google/long-t5-tglobal-base

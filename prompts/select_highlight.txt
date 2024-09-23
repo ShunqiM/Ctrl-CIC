@@ -1,0 +1,7 @@
+Task:
+From the provided context, extract and highlight ten different informative keyphrases (or keywords) that contain valuable and relevant information. The extracted content can be a single word or phrases made up with several words. They should encapsulate key details, descriptive elements, or contextual insights that would be valuable for image captioning tasks. The aim is to ensure that some meaningful caption texts can be generated relevant to these context. Output these extracted keyphrases in one line, splitted by \"|\" (i.e., in a restricted format as \"keyphrase1 | keyphrase2 | ...\"; this requirement is very important and must be followed with no excuse) DIRECTLY (without any explanation or details).
+
+Context Section:
+{{Document}}
+
+Keyphrase Extraction:

@@ -1,0 +1,27 @@
+dataset:
+  validset:
+    callable: PLACEHOLDER
+    params:
+      split: val
+      is_training: False
+      debug: False
+
+
+  testset:
+    callable: PLACEHOLDER
+    params:
+      split: test
+      is_training: False
+      debug: False
+
+save_model_output: False
+
+model:
+  collable: PLACEHOLDER
+  params:
+    
+
+
+
+      
+        

@@ -1,0 +1,76 @@
+recursive_load_config: True  # recursive load all "_default.yaml" files (from current level to all upper-level folders)
+
+use_cached_feature: False
+save_model_output: False
+use_image_embs: True
+
+# Evaluation with CLIPScore might lead to GPU OOM, you might need to run twice with 1. use_clip_score = use_sent_score = load_predictions = False to save the outputs locally
+# And 2. Run with all three = True for evaluation
+
+use_clip_score: True
+use_sent_score: True
+use_local_model: False
+
+evaluator:
+  callable: SimpleEvaluator
+  params:
+    run_id: zeroshot-llama
+    max_steps: 1000000
+    # max_steps: 262144
+    per_device_eval_batch_size: 1
+    remove_unused_columns: False
+    dataloader_num_workers: 16
+    # output_dir: tmp
+    output_dir: ${CKPT}/CIC/experiments
+    # output_dir: ${CKPT}/CIC/test
+    fp16: True
+    eval_steps: 0
+    do_val: False
+    do_test: True
+    test_model_index: 0
+    save_model_output: False
+    ccic_model: 'zeroshot-llm'
+    debug: False
+    wandb: False
+    load_predictions: True
+
+
+dataset:
+  validset:
+    callable: CCICInferenceDataset
+    params:
+      csv_name: val_image_dict_v7.csv
+      feature_matrix_name: val_image_feature_matrix.pt
+      max_src_len: 511
+      max_tgt_len: 128
+      mask_dir: 't5-large_mean_512'
+      normalise_score: fix_scale
+      mask_threshold: 0.65
+      pad_image: True
+
+  testset:
+    callable: CCICInferenceDataset
+    params:
+      csv_name: test_image_dict_ccic_fullset_v1.csv
+
+      feature_matrix_name: test_image_feature_matrix.pt
+      max_src_len: 639
+      max_tgt_len: 64
+      mask_dir: 't5-large_mean_512'
+      normalise_score: fix_scale
+      mask_threshold: 0.65
+      ccic_json_path: sample_1_highlight_1_fullset.json
+
+      mode: 'zeroshot-llm'
+      pad_image: True
+      debug: False
+
+      
+model:
+  model_class: transformers.LlamaForCausalLM
+  callable: Llama
+  params:
+    pretrained_model_name_or_path: meta-llama/Llama-2-7b-chat-hf
+    
+    # torch_dtype: torch.float16
+    device_map: "auto"

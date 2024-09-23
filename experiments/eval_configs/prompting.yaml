@@ -1,0 +1,62 @@
+recursive_load_config: True  # recursive load all "_default.yaml" files (from current level to all upper-level folders)
+
+use_cached_feature: True
+save_model_output: True
+# add_input_mask: True
+use_image_embs: True
+
+extra_special_tokens: [<MSK>, <SEP>, <CPT>]
+
+evaluator:
+  callable: SimpleEvaluator
+  params:
+    run_id: 231009-162123-pid311299-full_word_prefix-foraneous
+    max_steps: 1000000
+    # max_steps: 262144
+    per_device_eval_batch_size: 16
+    remove_unused_columns: False
+    dataloader_num_workers: 16
+    # output_dir: tmp
+    output_dir: ${CKPT}/CIC/experiments
+    # output_dir: ${CKPT}/CIC/test
+    fp16: False
+    eval_steps: 0
+    do_val: False
+    do_test: True
+    # test_model_index: 570000
+    test_model_index: 2760000
+    save_model_output: True
+    
+# change bs to 1, return_prefix to true, max_tgt_len to 128 for gt prefix decoding
+
+dataset:
+  validset:
+    callable: Web2MMaskPrefixDataset
+    params:
+      csv_name: val_image_dict_v7.csv
+      feature_matrix_name: val_image_feature_matrix.pt
+      max_src_len: 511
+      max_tgt_len: 192
+      mask_dir: 't5-large_mean_512'
+      normalise_score: fix_scale
+      mask_threshold: 0.65
+      return_prefix: False
+  testset:
+    callable: Web2MMaskPrefixDataset
+    params:
+      csv_name: test_image_dict_v7.csv
+      feature_matrix_name: test_image_feature_matrix.pt
+      max_src_len: 511
+      max_tgt_len: 192
+      mask_dir: 't5-large_mean_512'
+      normalise_score: fix_scale
+      mask_threshold: 0.65
+      return_prefix: False
+      token2word: True
+      pad_image: True
+
+model:
+  model_class: transformers.LongT5ForConditionalGeneration
+  callable: LongT5
+  params:
+    pretrained_model_name_or_path: google/long-t5-tglobal-base

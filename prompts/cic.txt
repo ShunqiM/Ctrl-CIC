@@ -1,0 +1,11 @@
+CONTEXTUAL IMAGE CAPTIONING REQUEST
+
+TASK: Based on the context and image description provided, please generate a contextual image caption that captures the essence of the image and its significance in the given context. Do not include any explanation.
+
+Context Section:
+{{Document}}
+
+Image Description:
+{{Attribution}}
+
+Contextual Caption (do not add quotations surrounding the response):

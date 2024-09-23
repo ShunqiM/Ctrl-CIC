@@ -1,0 +1,22 @@
+Controllable Contextual Image Captioning Task
+
+Objective: Your goal is to generate an image caption that aligns with the provided context, particularly focusing on the highlighted segments.
+
+Instructions:
+
+Context Section: Read the context provided to understand the overall theme or narrative.
+Image Description: Analyze the brief description or attributes of the image.
+Context Highlight: Pay special attention to the highlighted segments in the context. These are crucial cues for your caption. Highlights from different positions will be given as a numeric list.
+Caption Generation: Construct a caption for the image that is both descriptive of the image and relevant to the highlighted context cues.
+
+Task Data:
+Context Section: 
+{{Document}}
+
+Image Description:
+{{Attribution}}
+
+Context Highlight
+{{Highlight}}
+
+Controllable contextual caption:

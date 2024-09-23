@@ -1,0 +1,55 @@
+recursive_load_config: True  # recursive load all "_default.yaml" files (from current level to all upper-level folders)
+
+use_cached_feature: False
+save_model_output: True
+use_image_embs: True
+
+# Note this is not used due to potential memory issues, llava  is evaluated using a sole script
+use_local_model: False
+
+evaluator:
+  callable: SimpleEvaluator
+  params:
+    run_id: zeroshot-llava
+    max_steps: 1000000
+    test_model_index: 0
+    # max_steps: 262144
+    per_device_eval_batch_size: 4
+    remove_unused_columns: False
+    dataloader_num_workers: 16
+    # output_dir: tmp
+    output_dir: ${CKPT}/CIC/experiments
+    # output_dir: ${CKPT}/CIC/test
+    fp16: True
+    eval_steps: 0
+    do_val: False
+    do_test: True
+    save_model_output: True
+    debug: False
+    wandb: False
+    load_predictions: False
+
+dataset:
+  validset:
+    callable: InstructBlipDataset
+    params:
+      csv_name: val_image_dict_v7.csv
+      feature_matrix_name: val_image_feature_matrix.pt
+      max_src_len: 511
+      max_tgt_len: 128
+  testset:
+    callable: LlavaDataset
+    params:
+      csv_name: test_image_dict_v7.csv
+      max_src_len: 511
+      max_tgt_len: 128
+
+model:
+  model_class: transformers.LlavaForConditionalGeneration
+  callable: Llava
+  params:
+    pretrained_model_name_or_path: liuhaotian/llava-v1.6-mistral-7b
+    pretrained_model_name_or_path: llava-hf/llava-1.5-7b-hf
+    
+    # torch_dtype: torch.float16
+    device_map: "auto"

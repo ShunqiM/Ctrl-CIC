@@ -1,0 +1,1 @@
+Config files for models to make CIC (Contextualized Image Captioning) caption generation

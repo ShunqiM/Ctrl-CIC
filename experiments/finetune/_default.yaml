@@ -1,0 +1,34 @@
+dataset:
+  trainset:
+    callable: PLACEHOLDER
+    params:
+      split: train
+      is_training: True  # usecase: training data augmentation (applied to both train/valid dataset during training)
+      debug: False
+
+
+  validset:
+    callable: PLACEHOLDER
+    params:
+      split: val
+      is_training: True
+      debug: False
+
+
+  testset:
+    callable: PLACEHOLDER
+    params:
+      split: test
+      is_training: False
+      debug: False
+
+
+model:
+  collable: PLACEHOLDER
+  params:
+    
+
+
+
+      
+        
